@@ -2,28 +2,33 @@ name: Déploiement GitHub Pages
 on:
   push:
     branches: [ main ]
-# 1) Permissions globales pour GitHub Actions
 permissions:
-  contents: write    # autorise les actions à pousser des commits
-  pages: write       # autorise le déploiement GitHub Pages
-  id-token: write    # nécessaire pour certaines actions d'auth
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # (facultatif) Permissions spécifiques au job
     permissions:
-      pages: write
       contents: write
+      pages: write
+
     steps:
       - uses: actions/checkout@v3
         with:
-          persist-credentials: false  # pour laisser peaceiris/actions-gh-pages gérer l'auth
+          persist-credentials: false
+
       - name: Installe pnpm
         run: npm install -g pnpm
+
       - name: Installe les dépendances
         run: pnpm install
+
       - name: Génère le site
-        run: pnpm build
+        # on passe le base ici pour que Slidev écrive <base> dans index.html
+        run: pnpm build --base /mon-diaporama-slidev/
+
       - name: Déploie sur gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
