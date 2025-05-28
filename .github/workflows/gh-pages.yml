@@ -26,8 +26,11 @@ jobs:
         run: pnpm install
 
       - name: Génère le site
-        # on passe le base ici pour que Slidev écrive <base> dans index.html
-        run: pnpm build --base /mon-diaporama-slidev/
+        run: pnpm build
+
+      - name: Injecte <base> dans index.html
+        run: |
+          sed -i 's|<head>|<head>\n  <base href="/mon-diaporama-slidev/">|' dist/index.html
 
       - name: Déploie sur gh-pages
         uses: peaceiris/actions-gh-pages@v3
