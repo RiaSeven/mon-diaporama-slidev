@@ -2,13 +2,22 @@ name: Déploiement GitHub Pages
 on:
   push:
     branches: [ main ]
+# 1) Permissions globales pour GitHub Actions
+permissions:
+  contents: write    # autorise les actions à pousser des commits
+  pages: write       # autorise le déploiement GitHub Pages
+  id-token: write    # nécessaire pour certaines actions d'auth
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # (facultatif) Permissions spécifiques au job
+    permissions:
+      pages: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
-          persist-credentials: false
+          persist-credentials: false  # pour laisser peaceiris/actions-gh-pages gérer l'auth
       - name: Installe pnpm
         run: npm install -g pnpm
       - name: Installe les dépendances
